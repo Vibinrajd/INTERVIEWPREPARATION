@@ -1,0 +1,288 @@
+
+DDL/DML	
+	1. How to insert multiple records in a table in sql ?
+	2. How to add additional column in a table?
+	3. how to change the constraint in a table?
+	4. How to alter the column name in a table?
+	5. How to change the table name in sql?
+	6. How to update a particular value in a table
+
+Answers:
+1. How to insert multiple records in a table in SQL?
+There are two ways to insert multiple records in a table in SQL:
+● Using multiple INSERT statements: This is the simplest way to insert multiple records, but it can be tedious if you have a large number of records to insert.  To do this, simply write multiple INSERT statements, one for each record you want to insert. For example:
+SQL
+INSERT INTO table_name (column1, column2, ...) VALUES (value1, value2, ...);
+INSERT INTO table_name (column1, column2, ...) VALUES (value1, value2, ...);
+INSERT INTO table_name (column1, column2, ...) VALUES (value1, value2, ...);
+● Using a single INSERT statement: You can also insert multiple records in a table using a single INSERT statement. To do this, you need to use a comma separated list of values for each column in the table. For example:
+SQL
+INSERT INTO table_name (column1, column2, ...) VALUES
+(value1, value2, ...),
+(value1, value2, ...),
+(value1, value2, ...);
+
+2. How to add additional column in a table?
+To add an additional column to a table, you can use the ALTER TABLE statement. The syntax for the ALTER TABLE statement is as follows:
+SQL
+ALTER TABLE table_name
+ADD COLUMN column_name data_type;
+For example, to add a new column named email of data type VARCHAR(255) to the customers table, you would use the following statement:
+SQL
+ALTER TABLE customers
+ADD COLUMN email VARCHAR(255);
+
+3. how to change the constraint in a table?
+To change a constraint in a table, you can use the ALTER TABLE statement. The syntax for the ALTER TABLE statement is as follows:
+SQL
+ALTER TABLE table_name
+ALTER CONSTRAINT constraint_name new_constraint_definition;
+For example, to change the NOT NULL constraint on the name column in the customers table to NULL, you would use the following statement:
+SQL
+ALTER TABLE customers
+ALTER CONSTRAINT customers_name_not_null
+ALTER CONSTRAINT customers_name_not_null SET NULL;
+
+4. How to alter the column name in a table?
+To alter the name of a column in a table, you can use the ALTER TABLE statement. The syntax for the ALTER TABLE statement is as follows:
+SQL
+ALTER TABLE table_name
+RENAME COLUMN old_column_name TO new_column_name;
+For example, to rename the name column in the customers table to first_name, you would use the following statement:
+SQL
+ALTER TABLE customers
+RENAME COLUMN name TO first_name;
+
+5. How to change the table naame in sql?
+To change the name of a table in SQL, you can use the ALTER TABLE statement. The syntax for the ALTER TABLE statement is as follows:
+SQL
+ALTER TABLE old_table_name
+RENAME TO new_table_name;
+For example, to rename the customers table to customers_archive, you would use the following statement:
+SQL
+ALTER TABLE customers
+RENAME TO customers_archive;
+
+6. How to update a partiular value in a table
+To update a particular value in a table, you can use the UPDATE statement. The syntax for the UPDATE statement is as follows:
+SQL
+UPDATE table_name
+SET column_name = new_value
+WHERE condition;
+
+
+ 
+
+Constraint	"Create a table called 'Employees' with the following columns:
+	EmployeeID' as an integer primary key with auto-increment
+	Name' as a non-null varchar(50)
+	Age' as an integer with a check constraint that ensures the age is greater than or equal to 18
+	Department' as a varchar(50) with a default value of 'IT'."
+
+SQL
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(50) NOT NULL,
+    Age INT CHECK (Age >= 18),
+    Department VARCHAR(50) DEFAULT 'IT'
+);
+Table creation	Customer table
+	Create a customer table with following columns in SQLCODE
+	cust_id,cust_name,date,city,state,email_id,device,channel, in_time, out_time
+	contsraint: cust_id should be a primary key
+	date should be between the first and second quarter of 2023
+	in_time and out_time should be in time stamp and should have minor varitions between 1- 2 hours
+	insert 50 values for a time period of 4 months one customer can have multiple different data within this specified 3 MONTHS
+	channel can be any social media platform (istagram, youtube, hathway,pinterest, twitter, facebook and randomly arrange them
+	contsraint: cust_id should be a primary key
+	date should be between the first and second quarter of 2023
+
+Query 1:
+SQL code to create a customer table with the following columns:
+SQL
+CREATE TABLE customers (
+cust_id INT NOT NULL AUTO_INCREMENT,
+cust_name VARCHAR(255) NOT NULL,
+date DATE NOT NULL BETWEEN '2023-01-01' AND '2023-06-30',
+city VARCHAR(255) NOT NULL,
+state VARCHAR(255) NOT NULL,
+email_id VARCHAR(255) NOT NULL UNIQUE,
+device VARCHAR(255) NOT NULL,
+channel VARCHAR(255) NOT NULL CHECK (channel IN ('instagram', 'youtube', 'hathway', 'pinterest', 'twitter', 'facebook')),
+in_time TIMESTAMP NOT NULL,
+out_time TIMESTAMP NOT NULL,
+PRIMARY KEY (cust_id)
+);
+
+Query 2:
+SQL code to insert 50 values into the customer table for a time period of 4 months with one customer having multiple different data within 3 months:
+SQL
+INSERT INTO customers (cust_name, date, city, state, email_id, device, channel, in_time, out_time)
+VALUES
+('Customer 1', '2023-01-02', 'New York', 'NY', 'customer1@example.com', 'iPhone', 'instagram', '2023-01-02 10:00:00', '2023-01-02 11:00:00'),
+('Customer 1', '2023-01-03', 'San Francisco', 'CA', 'customer1@example.com', 'Android', 'youtube', '2023-01-03 12:00:00', '2023-01-03 13:00:00'),
+('Customer 2', '2023-02-04', 'Los Angeles', 'CA', 'customer2@example.com', 'iPhone', 'facebook', '2023-02-04 14:00:00', '2023-02-04 15:00:00'),
+...
+
+-- Insert 49 more records with different customer names, dates, cities, states, email IDs, devices, channels, in times, and out times,
+making sure that one customer has multiple different data within 3 months
+
+Query 3:
+SQL code to randomly arrange the channel column values:
+SQL
+UPDATE customers
+SET channel = (SELECT channel FROM (
+SELECT channel, RAND() AS rand
+FROM customers
+ORDER BY rand
+) AS t1);
+
+
+Keys	The "Customers" table with a primary key:
+	The "CustomerID" column is set as the primary key, ensuring uniqueness for each customer.
+	The "Orders" table with a foreign key:
+	The "OrderID" column is set as the primary key.
+	The "CustomerID" column is set as a foreign key referencing the "CustomerID" column in the "Customers" table, establishing a relationship between the two tables.
+	The "Products" table with a composite primary key:
+	The "ProductID" and "VariantID" columns together form a composite primary key, ensuring uniqueness for each combination of "ProductID" and "VariantID".
+
+Certainly! Below is an example SQL code for creating the described "Customers," "Orders," and "Products" tables with the specified keys:
+
+1.  Customers Table with Primary Key: 
+   - The "CustomerID" column is set as the primary key.
+SQL
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    -- Other columns as needed
+);
+
+2.  Orders Table with Foreign Key: 
+   - The "OrderID" column is set as the primary key.
+   - The "CustomerID" column is set as a foreign key referencing the "CustomerID" column in the "Customers" table.
+ SQL
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY,
+    CustomerID INT,
+    OrderDate DATE,
+    -- Other columns as needed
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+3.  Products Table with Composite Primary Key: 
+   - The "ProductID" and "VariantID" columns together form a composite primary key.
+ SQL
+CREATE TABLE Products (
+    ProductID INT,
+    VariantID INT,
+    ProductName VARCHAR(100),
+    -- Other columns as needed
+    PRIMARY KEY (ProductID, VariantID)
+);
+This code snippet assumes that there is a one-to-many relationship between "Customers" and "Orders," where one customer can have multiple orders. The foreign key in the "Orders" table references the primary key in the "Customers" table, establishing this relationship.
+Similarly, the "Products" table has a composite primary key consisting of "ProductID" and "VariantID," ensuring uniqueness for each combination.
+
+
+
+
+What is a RDBMS
+SQL VS SQL server
+What are all the properties of a sql?
+Explain any 3 different databases you know?
+When to adopt sql database?
+Diff DDL VS DML
+ACID property of a database
+Diff Unique and primary key
+Truncate is DDL or DML
+What is mean by Foreign key and its uses
+What are the different constraints in SQL and explain
+Diff between char and varchar
+Diff between float, double and decimal
+Cloud VS Onpremise
+OLTP vs OLAP
+Can we insert duplicate value to primary key columns?
+Which table should be created primary key table or Foreign Key Table ?
+In which order the data should be inserted(primary -> foreign key table) or (foreign to primary key table)
+I want column gender to accept values Male,Female only what data type should I use ?
+Truncate VS Delete vs DROP
+How many Primary,Foreignkey,Unique key can be created in a table.
+
+1. What is a RDBMS:
+   - RDBMS stands for Relational Database Management System. It is a type of database management system that stores data in tables and establishes relationships between them.
+
+2. SQL vs. SQL Server:
+   - SQL (Structured Query Language): A standard language for managing and manipulating relational databases.
+   - SQL Server: Microsoft's relational database management system that uses SQL as its query language.
+
+3. Properties of SQL:
+   - SQL, or Structured Query Language, is a domain-specific language used for managing and manipulating relational databases. Its properties include the ability to query and update data, define and modify schema, and control access to the database.
+
+4. Three Different Databases:
+   - MySQL: An open-source relational database management system.
+   - MongoDB: A NoSQL database that stores data in flexible, JSON-like documents.
+   - Oracle Database:  A widely used relational database management system developed by Oracle Corporation.
+
+5. When to Adopt SQL Database:
+   - SQL databases are suitable when data needs to be structured, and relationships between different data entities are important. They are a good choice for applications where ACID compliance and data integrity are crucial.
+
+6. Diff DDL vs. DML:
+   - DDL (Data Definition Language): Deals with the structure of the database, e.g., creating, altering, or deleting tables.
+   - DML (Data Manipulation Language): Involves operations on the data itself, e.g., inserting, updating, or deleting records.
+
+7. ACID Property of a Database:
+   - ACID properties (Atomicity, Consistency, Isolation, Durability) ensure that database transactions are reliable, accurate, and maintain data integrity.
+
+8. Diff Unique and Primary Key:
+   - Both enforce uniqueness, but a table can have multiple unique constraints, while it can have only one primary key. The primary key also implies that the column is not nullable.
+
+9. Truncate is DDL or DML:
+   - `TRUNCATE` is a DDL (Data Definition Language) command. It is used to remove all records from a table while retaining the structure.
+
+10. Foreign Key and Its Uses:
+    - A foreign key is a field that refers to the primary key in another table, establishing a link between the two tables. It enforces referential integrity, ensuring relationships between tables are valid.
+
+11. Different Constraints in SQL:
+    - Constraints include Primary Key, Foreign Key, Unique, Check, and Default. They enforce rules to maintain data integrity.
+
+12. Diff between CHAR and VARCHAR:
+    - CHAR: Fixed-length character data type.
+    - VARCHAR: Variable-length character data type.
+
+13. Diff between Float, Double, and Decimal:
+    - Float and Double: Approximate numeric data types.
+    - Decimal: Exact numeric data type, suitable for precise calculations.
+
+14. Cloud vs. On-Premise:
+    - Cloud: Resources hosted remotely, offering scalability and accessibility.
+    - On-Premise: Resources maintained locally, providing more control.
+
+15. OLTP vs. OLAP:
+    - OLTP (Online Transaction Processing): Handles day-to-day transactional operations.
+    - OLAP (Online Analytical Processing): Supports complex, read-heavy queries for analysis.
+
+16.  Can We Insert Duplicate Values into Primary Key Columns? 
+    - No, primary keys must be unique.
+
+17.  Primary Key Table vs. Foreign Key Table: 
+    - The primary key table is created first, as the foreign key references the primary key.
+
+18.  Order of Data Insertion: 
+    - Data should be inserted into the primary key table first, followed by the foreign key table.
+
+19.  Column Gender Data Type: 
+    - You can use ENUM or VARCHAR with a check constraint to allow only specific values like 'Male' and 'Female'.
+
+20.  Truncate vs. Delete vs. DROP: 
+    - `TRUNCATE`: Removes all records, but retains the table structure.
+    - `DELETE`: Removes selected records.
+    - `DROP`: Deletes the entire table structure.
+
+21.  Number of Keys in a Table: 
+    - Multiple primary, foreign, and unique keys can be created in a table based on requirements. There isn't a strict limit, but practical considerations and database design principles should be followed.
+
+
+
+
+
