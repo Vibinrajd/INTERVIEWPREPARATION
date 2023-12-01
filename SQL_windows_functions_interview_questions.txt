@@ -1,0 +1,138 @@
+Certainly! Here are the answers to the interview questions:
+
+1.  Window Functions: 
+   - Window functions perform calculations across a set of rows related to the current row, defined by an OVER clause. Examples include `ROW_NUMBER()`, `RANK()`, `LEAD()`, `LAG()`, and aggregate functions like `SUM()` and `AVG()`.
+
+2.  CTE (Common Table Expression): 
+   - A CTE is a named temporary result set that can be referenced within a SELECT, INSERT, UPDATE, or DELETE statement. It improves code readability and simplifies complex queries.
+
+3.  Identifying Duplicates: 
+   - Duplicates can be identified using the `GROUP BY` clause along with the `HAVING` clause or the `COUNT()` function. For example:
+      SQL
+     SELECT column_name, COUNT(*)
+     FROM table_name
+     GROUP BY column_name
+     HAVING COUNT(*) > 1;
+
+4.  Use Case of `ROW_NUMBER()`: 
+   - `ROW_NUMBER()` is used to assign a unique integer to each row within a partition. A use case could be assigning a ranking to products within each category based on certain criteria.
+
+5.  How `ROWID` differs from `ROW_NUMBER()`: 
+   - `ROWID` is specific to certain databases (e.g., Oracle) and represents the unique address of a row. `ROW_NUMBER()` is a standard SQL function that assigns a unique number to each row within a specified window or partition.
+
+6.  Where to Use Partition: 
+   - The `PARTITION BY` clause is used with window functions to divide the result set into partitions for separate function application. It's used when you want to perform calculations on subsets of data within a result set.
+
+7.  Difference Between a Table and a CTE: 
+   - A table is a permanent storage structure holding data. A CTE is a temporary result set derived from a SELECT statement, existing only for the duration of the query.
+
+8.  Difference Between `RANK()` and `DENSE_RANK()`: 
+   - Both `RANK()` and `DENSE_RANK()` assign ranks to rows based on a specified column. `RANK()` leaves gaps in ranking for tied values, while `DENSE_RANK()` does not.
+
+9.  When to Use `LAG()` and `LEAD()`: 
+   - `LAG()` and `LEAD()` are used to access the value of a column from the previous or next row, helpful for comparing values across rows or calculating differences. For example, you might use `LAG()` to compare the current sales value with the previous day's sales in a time-series dataset. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1.  Ranking Employees by Salary: 
+    SQL
+   SELECT
+     EmployeeID,
+     Name,
+     Salary,
+     RANK() OVER (ORDER BY Salary DESC) AS SalaryRank
+   FROM Employees;
+
+2.  Running Total of Sales: 
+    SQL
+   SELECT
+     TransactionID,
+     Date,
+     Amount,
+     SUM(Amount) OVER (ORDER BY Date) AS RunningTotal
+   FROM Sales;
+
+3.  Finding the Top N Products in Each Category: 
+    SQL
+   WITH RankedProducts AS (
+     SELECT
+       ProductID,
+       ProductName,
+       Category,
+       Sales,
+       ROW_NUMBER() OVER (PARTITION BY Category ORDER BY Sales DESC) AS ProductRank
+     FROM Products
+   )
+   SELECT
+     ProductID,
+     ProductName,
+     Category,
+     Sales
+   FROM RankedProducts
+   WHERE ProductRank <= N; -- Replace N with the desired number of top products
+
+4.  Calculating the Difference in Revenue between Years: 
+    SQL
+   SELECT
+     Year,
+     Revenue,
+     LAG(Revenue) OVER (ORDER BY Year) AS PreviousYearRevenue,
+     Revenue - LAG(Revenue) OVER (ORDER BY Year) AS RevenueDifference
+   FROM Revenue;
+
+5.  Calculating Average Monthly Sales: 
+    SQL
+   SELECT
+     TransactionID,
+     Date,     Amount,
+     AVG(Amount) OVER (PARTITION BY Product, MONTH(Date)) AS AvgMonthlySales
+   FROM Sales
+   GROUP BY TransactionID, Date, Amount;
+
+6.  Query to Get the Top 5 Employee Salaries: 
+    SQL
+   SELECT
+     emp_id,
+     name,
+     department,
+     salary
+   FROM employee
+   ORDER BY salary DESC
+   LIMIT 5;
+
+7.  Checking Call Transactions for Customers: 
+    SQL
+   WITH CustomerCallStatus AS (
+     SELECT
+       customer_id,
+       MAX(CASE WHEN Transaction = 'call' THEN 'yes' ELSE 'no' END) AS Status,
+       COUNT(CASE WHEN Transaction = 'call' THEN 1 END) AS NumberOfCalls
+     FROM customer_transactions
+     GROUP BY customer_id
+   )
+   SELECT * FROM CustomerCallStatus;
+
+   -- Details of customer and date where their first call transaction happened
+   SELECT
+     customer_id,
+     MIN(date) AS FirstCallDate
+   FROM customer_transactions
+   WHERE Transaction = 'call'
+   GROUP BY customer_id;
+
