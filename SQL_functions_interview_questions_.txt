@@ -1,0 +1,154 @@
+
+1.  COUNT(COLUMN) vs COUNT(1) vs COUNT(*) 
+   - `COUNT(COLUMN)`: Counts the number of non-null values in the specified column.
+   - `COUNT(1)`: Counts the number of rows; the argument is not relevant; it's a common shorthand.
+   - `COUNT(*)`: Counts the total number of rows, including those with null values.
+
+2.  Scalar Functions vs Table-Valued Functions in SQL 
+   - Scalar functions return a single value, while table-valued functions return a table.
+   - Scalar Function Example:
+      SQL
+     SELECT LEN('Hello') AS LengthOfHello;
+   - Table-Valued Function Example:
+      SQL
+     CREATE FUNCTION GetEmployees()
+     RETURNS TABLE	
+     AS
+     RETURN (SELECT * FROM Employees);
+
+3.  Using `COUNT()` to Find the Number of Rows 
+    SQL
+   SELECT COUNT(*) AS NumberOfRows
+   FROM TableName;
+
+4.  Purpose of `GROUP BY` Clause 
+   - Used to group rows based on a column's values and perform aggregate functions on each group.
+    SQL
+   SELECT Department, AVG(Salary) AS AvgSalary
+   FROM Employees
+   GROUP BY Department;
+
+5.  Difference between `HAVING` and `WHERE` Clauses 
+   - `WHERE` filters rows before grouping, `HAVING` filters after grouping.
+    SQL
+   SELECT Department, AVG(Salary) AS AvgSalary
+   FROM Employees
+   GROUP BY Department
+   HAVING AVG(Salary) > 50000;
+
+6.  Using `SUM()` to Calculate Total 
+    SQL
+   SELECT SUM(Salary) AS TotalSalary
+   FROM Employees;
+
+7.  Purpose of `CONCAT()` Function 
+   - Used to concatenate strings.
+    SQL
+   SELECT CONCAT(FirstName, ' ', LastName) AS FullName
+   FROM Employees;
+
+8.  Finding Highest and Lowest Values 
+   - Highest: `SELECT MAX(Column) FROM TableName;`
+   - Lowest: `SELECT MIN(Column) FROM TableName;`
+
+
+9.  Aggregate Functions in SQL 
+   - Perform operations on a set of values and return a single value.
+    SQL
+   SELECT AVG(Salary) AS AvgSalary, COUNT(*) AS NumEmployees
+   FROM Employees;
+
+10.  Using `DATEPART()` to Extract Parts of a Date 
+     SQL
+    SELECT DATEPART(YEAR, HireDate) AS HireYear
+    FROM Employees;
+
+11.  Purpose of `COALESCE()` Function 
+    - Returns the first non-null expression in the list.
+     SQL
+    SELECT COALESCE(NullableColumn, 'Default') AS Result
+    FROM TableName;
+
+12.  `CASE` Statement with Functions for Conditional Logic 
+     SQL
+    SELECT
+      CASE
+        WHEN Condition1 THEN Result1
+        WHEN Condition2 THEN Result2
+        ELSE DefaultResult
+      END AS CustomColumn
+    FROM TableName;
+
+13.  Window Functions and `ROW_NUMBER()` 
+    - `ROW_NUMBER()` assigns a unique number to each row within a partition.
+     SQL
+    SELECT
+      EmployeeID,
+      Salary,
+      ROW_NUMBER() OVER (ORDER BY Salary DESC) AS SalaryRank
+    FROM Employees;
+
+14.  Using `DATEDIFF()` to Calculate Date Differences 
+     SQL
+    SELECT DATEDIFF(DAY, StartDate, EndDate) AS DateDifference
+    FROM Events;
+
+15.  `CAST()` and `CONVERT()` Functions 
+    - Used to convert one data type to another.
+     SQL
+    SELECT CAST(Column AS INT) AS ConvertedValue
+    FROM TableName;
+
+16.  `RANK()` vs `DENSE_RANK()` 
+    - `RANK()` leaves gaps in ranking for tied values, while `DENSE_RANK()` does not.
+     SQL
+    SELECT
+      EmployeeID,
+      Salary,
+      RANK() OVER (ORDER BY Salary DESC) AS SalaryRank,
+      DENSE_RANK() OVER (ORDER BY Salary DESC) AS DenseSalaryRank
+    FROM Employees;
+
+17.  Using `STRING_SPLIT()` Function 
+    - Splits a string into a table of values.
+     SQL
+    SELECT value
+    FROM STRING_SPLIT('Apple,Orange,Banana', ',');
+
+18.  Recursive SQL Function 
+    - A function that calls itself, often used for hierarchical data.
+     SQL
+    WITH RecursiveCTE AS (
+      SELECT ID, ParentID, Name
+      FROM Table
+      WHERE ParentID IS NULL
+      UNION ALL
+      SELECT t.ID, t.ParentID, t.Name
+      FROM Table t
+      INNER JOIN RecursiveCTE r ON t.ParentID = r.ID
+    )
+    SELECT * FROM RecursiveCTE;
+    
+19.  Purpose of `LEAD()` and `LAG()` Window Functions 
+    - `LEAD()` gets the value of a column in the next row, `LAG()` gets the value in the previous row.
+     SQL
+    SELECT
+      EmployeeID,
+      Salary,
+      LEAD(Salary) OVER (ORDER BY Salary) AS NextSalary,
+      LAG(Salary) OVER (ORDER BY Salary) AS PrevSalary
+    FROM Employees;
+    
+20.  Using `AVG()` to Calculate Average, Excluding NULLs 
+     SQL
+    SELECT AVG(Column) AS AvgColumn
+    FROM TableName
+    WHERE Column IS NOT NULL;
+    
+21.  Set Operators 
+    - Set operators combine the results of two queries.
+     SQL
+    SELECT Column1 FROM Table1
+    UNION
+    SELECT Column1 FROM Table2;
+    
